@@ -1,30 +1,33 @@
-export default class Drawer{
+import KTrianlge from "./kTriangle.js";
+
+export default class KDrawer{
   static Init(){
-    /*-prototype-*/
-    this.gl;
-    /*-----------*/
+    return new Promise(res=>{
+      /*-prototype-*/
+      this.gl;
+      /*-----------*/
 
-    const canvas = document.getElementById("cvs");
-    canvas.width = 400;
-    canvas.height = 400;
-    this.gl = canvas.getContext("webgl");
+      const canvas = document.getElementById("cvs");
+      canvas.width = 400;
+      canvas.height = 400;
+      this.gl = canvas.getContext("webgl");
 
-    const fp = "main.frag";
-    const vp = "main.vert";
-    const program = this.gl.createProgram(); 
+      const fp = "kawa/main.frag";
+      const vp = "kawa/main.vert";
+      const program = this.gl.createProgram(); 
 
-    this.BufferInit(this.gl);
-    this.CreateShader(this.gl,fp).then(fs=>{
-      this.gl.attachShader(program,fs);
-      return this.CreateShader(this.gl,vp);
-    }).then(vs=>{
-      this.gl.attachShader(program,vs);
-      this.gl.linkProgram(program);
-      this.gl.useProgram(program);
-      this.AttributeInit(program , this.gl);
-      this.Render(this.gl);
-    });
-    
+      this.BufferInit(this.gl);
+      this.CreateShader(this.gl,fp).then(fs=>{
+        this.gl.attachShader(program,fs);
+        return this.CreateShader(this.gl,vp);
+      }).then(vs=>{
+        this.gl.attachShader(program,vs);
+        this.gl.linkProgram(program);
+        this.gl.useProgram(program);
+        this.AttributeInit(program , this.gl);
+        res();
+      });
+    })
   }
   static AttributeInit(program , gl){
     const attr = gl.getAttribLocation(program,"position");
@@ -70,11 +73,16 @@ export default class Drawer{
     });
   }
 
-  static Render(){
+  static Render(Stage){
     const gl = this.gl;
     gl.clearColor(0,0,0,1);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLES,0,3);
+
+    Stage.list.forEach(e=>{
+      gl.bufferData(gl.ARRAY_BUFFER,e.posData,gl.STATIC_DRAW);
+      gl.drawArrays(gl.TRIANGLES,0,3);
+    })
+
     gl.flush();
   }
 }
