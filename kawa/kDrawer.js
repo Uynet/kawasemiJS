@@ -62,25 +62,13 @@ export default class KDrawer{
   static getGL(){
     return this.gl;
   }
-  static RenderTriangle(t){
-    const gl = this.gl;
-    gl.bindBuffer(gl.ARRAY_BUFFER,t.VBO);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(t.posData),gl.STATIC_DRAW);
-    gl.drawArrays(gl.TRIANGLES,0,3);
-    gl.bindBuffer(gl.ARRAY_BUFFER,null);
-  }
-  static RenderRectangle(r){
-  }
   static Render(Stage){
     const gl = this.gl;
     gl.clearColor(0,0,0,1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     Stage.list.forEach(e=>{
-      switch(e.primitiveType){
-        case "RECTANGLE" : this.RnederRectangle(e) ; break; 
-        case "TRIANGLE" : this.RenderTriangle(e); break; 
-      }
+      e.Render();
     })
 
     gl.flush();

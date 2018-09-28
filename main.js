@@ -18,12 +18,14 @@ export default class Main{
       t1 = new kawa.Triangle(posData);
       r1 = new kawa.Rectangle(-0.5,-0.5,0.5,0.5);
       stage.Add(t1);
+      stage.Add(r1);
       res();
     })
   }
   static Run(){
-    t1.posData[0]+=Math.cos(timer/10)/10;
     requestAnimationFrame(Main.Run);
+
+    t1.posData[0]+=Math.cos(timer/10)/10;
     kawa.Render(stage);
     timer++;
   }
