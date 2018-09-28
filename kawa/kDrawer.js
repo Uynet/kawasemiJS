@@ -14,36 +14,23 @@ export default class KDrawer{
 
       const fp = "kawa/main.frag";
       const vp = "kawa/main.vert";
-      const program = this.gl.createProgram(); 
+      this.program = this.gl.createProgram(); 
 
       this.BufferInit(this.gl);
       this.CreateShader(this.gl,fp).then(fs=>{
-        this.gl.attachShader(program,fs);
+        this.gl.attachShader(this.program,fs);
         return this.CreateShader(this.gl,vp);
       }).then(vs=>{
-        this.gl.attachShader(program,vs);
-        this.gl.linkProgram(program);
-        this.gl.useProgram(program);
-        this.AttributeInit(program , this.gl);
+        this.gl.attachShader(this.program,vs);
+        this.gl.linkProgram(this.program);
+        this.gl.useProgram(this.program);
         res();
       });
     })
   }
-  static AttributeInit(program , gl){
-    const attr = gl.getAttribLocation(program,"position");
-    gl.enableVertexAttribArray(attr);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
-    gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0);
-  }
   static BufferInit(gl){
     this.vertexPositionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER , this.vertexPositionBuffer);
-    const posData = new Float32Array([
-      1,0,
-      0,1,
-      1,1,
-    ]);
-    gl.bufferData(gl.ARRAY_BUFFER,posData,gl.STATIC_DRAW);
   }
   static CreateShader(gl,path){
     return new Promise((res,rej)=>{
@@ -72,17 +59,31 @@ export default class KDrawer{
       xhr.send(null);
     });
   }
-
+  static getGL(){
+    return this.gl;
+  }
+  static RenderTriangle(t){
+    const gl = this.gl;
+    gl.bindBuffer(gl.ARRAY_BUFFER,t.VBO);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(t.posData),gl.STATIC_DRAW);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+    gl.bindBuffer(gl.ARRAY_BUFFER,null);
+  }
+  static RenderRectangle(r){
+  }
   static Render(Stage){
     const gl = this.gl;
     gl.clearColor(0,0,0,1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     Stage.list.forEach(e=>{
-      gl.bufferData(gl.ARRAY_BUFFER,e.posData,gl.STATIC_DRAW);
-      gl.drawArrays(gl.TRIANGLES,0,3);
+      switch(e.primitiveType){
+        case "RECTANGLE" : this.RnederRectangle(e) ; break; 
+        case "TRIANGLE" : this.RenderTriangle(e); break; 
+      }
     })
 
     gl.flush();
   }
+
 }
