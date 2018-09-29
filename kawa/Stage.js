@@ -1,5 +1,5 @@
 
-export default class KStage{
+export default class Stage{
   constructor(){
     this.list = [];
   }

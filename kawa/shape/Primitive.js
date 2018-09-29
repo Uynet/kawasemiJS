@@ -1,32 +1,28 @@
-import kawa from "./kawasemi.js";
-import KDrawer from "./kDrawer.js";
+import kawa from "../kawasemi.js";
+import Renderer from "../glCore/renderer.js";
 
-export default class KPrimitive{
+export default class Primitive{
   constructor(){
-    //this.primitiveType;
-    //this.posData;
-    //this.VBOInit();
-    //this.AttributeInit();
   }
   Render(){
-    const gl = KDrawer.getGL();
+    const gl = Renderer.getGL();
     this.AttributeInit()
     gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.posData),gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
     gl.drawArrays(gl.TRIANGLES,0,3);
     gl.flush();
     gl.bindBuffer(gl.ARRAY_BUFFER,null);
   }
   VBOInit(){
-    const gl = KDrawer.getGL();
+    const gl = Renderer.getGL();
     this.VBO = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.posData),gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER,null);
   }
   AttributeInit(){
-    const gl = KDrawer.getGL();
-    const program = KDrawer.program;
+    const gl = Renderer.getGL();
+    const program = Renderer.program;
     gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
     const attr = gl.getAttribLocation(program,"position");
     gl.enableVertexAttribArray(attr);

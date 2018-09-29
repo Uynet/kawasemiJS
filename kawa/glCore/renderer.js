@@ -1,6 +1,4 @@
-import KTrianlge from "./kTriangle.js";
-
-export default class KDrawer{
+export default class Renderer{
   static Init(){
     return new Promise(res=>{
       /*-prototype-*/
