@@ -10,8 +10,8 @@ export default class Renderer{
       canvas.height = 400;
       this.gl = canvas.getContext("webgl");
 
-      const fp = "kawa/main.frag";
-      const vp = "kawa/main.vert";
+      const fp = "kawa/Material/flat.frag";
+      const vp = "kawa/Material/flat.vert";
       this.program = this.gl.createProgram(); 
 
       this.BufferInit(this.gl);

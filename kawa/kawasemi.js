@@ -4,23 +4,19 @@ import Renderer from "./glCore/renderer.js";
 import Rectangle from "./shape/Rectangle.js";
 
 export default class KAWA{
-  constructor(width , height){
-    this.width = width;
-    this.height = height;
-    this.Stage = Stage;
-    this.Drawer = Renderer;
-    this.Triangle = Triangle;
-    this.Rectangle = Rectangle;
+  static Init(width , height){
+    return new Promise(res=>{
+      this.width = width;
+      this.height = height;
+      this.Stage = Stage;
+      this.Renderer = Renderer;
+      this.Triangle = Triangle;
+      this.Rectangle = Rectangle;
 
-    this.Init();
+      this.Renderer.Init().then(res);
+    })
   }
-  Init(){
-    this.Drawer.Init();
-  }
-  getGL(){
-    return this.Drawer.getGL(); 
-  }
-  Render(stage){
-    this.Drawer.Render(stage);
+  static Render(stage){
+    this.Renderer.Render(stage);
   }
 }
