@@ -6,7 +6,6 @@ export default class Primitive{
   }
   Render(){
     const gl = Renderer.getGL();
-    this.AttributeInit()
     gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
     gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
     gl.drawArrays(gl.TRIANGLES,0,3);
@@ -22,7 +21,7 @@ export default class Primitive{
   }
   AttributeInit(){
     const gl = Renderer.getGL();
-    const program = Renderer.program;
+    const program = Renderer.program.program;
     gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
     const attr = gl.getAttribLocation(program,"position");
     gl.enableVertexAttribArray(attr);

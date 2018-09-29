@@ -1,24 +1,24 @@
-import GLProgram from "./glProgram.js";
+import Renderer from "./renderer.js";
 
-export default class Renderer{
-  static Init(){
-    return new Promise(res=>{
-      /*-prototype-*/
-      this.gl;
-      /*-----------*/
+export default class GLProgram{
+  //fp,vp ... path to shader file
+  constructor(fp,vp,res){
+    const gl = Renderer.gl;
+    this.program = gl.createProgram(); 
 
-      const canvas = document.getElementById("cvs");
-      canvas.width = 400;
-      canvas.height = 400;
-      this.gl = canvas.getContext("webgl");
-
-      const fp = "kawa/Material/flat.frag";
-      const vp = "kawa/Material/flat.vert";
-      this.program = new GLProgram(fp,vp,res);
-
-    })
+    this.CreateShader(gl,fp).then(fs=>{
+      gl.attachShader(this.program,fs);
+      return this.CreateShader(gl,vp);
+    }).then(vs=>{
+      gl.attachShader(this.program,vs);
+      gl.linkProgram(this.program);
+      gl.useProgram(this.program);
+      cl("po")
+      res();
+    });
   }
-  static CreateShader(gl,path){
+  //Read shader program and create shader object
+  CreateShader(gl,path){
     return new Promise((res,rej)=>{
       const type = (function(){
         switch(path.split(".")[1]){
@@ -45,19 +45,4 @@ export default class Renderer{
       xhr.send(null);
     });
   }
-  static getGL(){
-    return this.gl;
-  }
-  static Render(Stage){
-    const gl = this.gl;
-    gl.clearColor(0,0,0,1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-    Stage.list.forEach(e=>{
-      e.Render();
-    })
-
-    gl.flush();
-  }
-
 }
