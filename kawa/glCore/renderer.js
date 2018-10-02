@@ -1,52 +1,16 @@
 import GLProgram from "./glProgram.js";
+import FlatMaterial from "../Material/flatMaterial.js";
 
 export default class Renderer{
-  static Init(){
-    return new Promise(res=>{
-      /*-prototype-*/
-      this.gl;
-      /*-----------*/
+  static Init(width,height){
+    /*-prototype-*/
+    this.gl;
+    /*-----------*/
 
-      const canvas = document.getElementById("cvs");
-      canvas.width = 400;
-      canvas.height = 400;
-      this.gl = canvas.getContext("webgl");
-
-      const fp = "kawa/Material/flat.frag";
-      const vp = "kawa/Material/flat.vert";
-      this.program = new GLProgram(fp,vp,res);
-
-    })
-  }
-  static CreateShader(gl,path){
-    return new Promise((res,rej)=>{
-      const type = (function(){
-        switch(path.split(".")[1]){
-          case "frag" : return gl.FRAGMENT_SHADER;
-          case "vert" : return gl.VERTEX_SHADER;
-          default : return "error:"+path.split[1];
-        }
-      }());
-      const xhr = new XMLHttpRequest();
-      xhr.open("GET",path,true);
-      xhr.addEventListener("load", event => {
-        const code = event.target.response;
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader,code);
-        gl.compileShader(shader);
-        if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-          res(shader);
-        } else {
-          console.error(gl.getShaderInfoLog(shader));
-          rej();
-        }
-      });
-
-      xhr.send(null);
-    });
-  }
-  static getGL(){
-    return this.gl;
+    const canvas = document.getElementById("cvs");
+    canvas.width = width;
+    canvas.height = height; 
+    this.gl = canvas.getContext("webgl");
   }
   static Render(Stage){
     const gl = this.gl;

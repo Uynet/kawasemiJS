@@ -30,7 +30,7 @@ export default class Main{
   }
 }
 
-KAWA.Init(300,400).then(()=>{
+KAWA.Init(400,400).then(()=>{
   Main.Init().then(Main.Run);
 });
 
