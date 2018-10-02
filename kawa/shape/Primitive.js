@@ -5,8 +5,6 @@ import GLProgram from "../glCore/glProgram.js";
 export default class Primitive{
   constructor(){
   }
-  CreateGLProgram(){
-  }
   Render(){
     const gl = Renderer.gl;
     gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
@@ -15,12 +13,19 @@ export default class Primitive{
     gl.flush();
     gl.bindBuffer(gl.ARRAY_BUFFER,null);
   }
-  VBOInit(){
+  VBOInit(data){
     const gl = Renderer.gl;
     this.VBO = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER,null);
+  }
+  IBOInit(data){
+    const gl = Renderer.gl;
+    this.IBO = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.IBO);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Int16Array(data),gl.STATIC_DRAW)
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,null);
   }
   /*
   AttributeInit(){

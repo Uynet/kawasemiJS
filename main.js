@@ -2,7 +2,6 @@ import KAWA from "./kawa/kawasemi.js";
 
 let kawa,stage;
 let r1,r2;
-let timer;
 
 export default class Main{
   static Init(){
@@ -14,11 +13,9 @@ export default class Main{
       stage.Add(r1);
       stage.Add(r2);
 
-      //let shader = kawa.LoadShader("shader.frag");
-
-      //let texture = kawa.LoadTexture("img.png");
-      //let sprite = kawa.CreateSprite(texture);
-      //stage.Add(sprite);
+      let texture = new KAWA.Texture("resource/img.png");
+      let sprite = new KAWA.Sprite(texture,0,0);
+      stage.Add(sprite);
 
       res();
     })

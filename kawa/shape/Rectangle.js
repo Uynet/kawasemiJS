@@ -3,6 +3,7 @@ import Renderer from "../glCore/renderer.js";
 import Primitive from "./Primitive.js";
 import GLProgram from "../glCore/glProgram.js";
 import FlatMaterial from "../Material/flatMaterial.js";
+import TextureMaterial from "../Material/textureMaterial.js";
 
 export default class Rectanlge extends Primitive{
   constructor(x,y,w,h){
@@ -15,32 +16,31 @@ export default class Rectanlge extends Primitive{
     this.vertexData = [
       x , y ,
       x+w , y ,
-      x+w , y+h ,
-      x , y ,
-      x+w , y+h ,
       x , y+h ,
+      x+w , y+h ,
     ]
-    this.program = FlatMaterial.program;
-    /*
-    this.VBOInit();
-    this.AttributeInit()
-    */
+    this.material = FlatMaterial;
+    this.VBOInit(this.vertexData);
+    this.indexData = [
+      0,1,2,
+      1,2,3
+    ]
+    this.IBOInit(this.indexData);
   }
   Render(){
     const gl = Renderer.gl;
-    this.VBOInit();
     this.AttributeInit()
     gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
-    gl.drawArrays(gl.TRIANGLES,0,3);
-    gl.drawArrays(gl.TRIANGLES,3,3);
+    gl.useProgram(this.material.program);
+    //gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.IBO);
+    gl.drawElements(gl.TRIANGLES,this.indexData.length,gl.UNSIGNED_SHORT,0);
     gl.flush();
     gl.bindBuffer(gl.ARRAY_BUFFER,null);
   }
   AttributeInit(){
     const gl = Renderer.gl;
-    //const program = this.program;
-    const program = this.program;
+    const program = this.material.program;
     gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
     const attr = gl.getAttribLocation(program,"position");
     gl.enableVertexAttribArray(attr);
