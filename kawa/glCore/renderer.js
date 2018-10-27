@@ -11,6 +11,9 @@ export default class Renderer{
     canvas.width = width;
     canvas.height = height; 
     this.gl = canvas.getContext("webgl");
+    if(this.gl==null){
+      console.error("webGL対応してないよ")
+    }
   }
   static Render(Stage){
     const gl = this.gl;

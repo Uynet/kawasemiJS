@@ -1,7 +1,6 @@
 import kawa from "../kawasemi.js";
 import Renderer from "../glCore/renderer.js";
 import Primitive from "./Primitive.js";
-import GLProgram from "../glCore/glProgram.js";
 import FlatMaterial from "../Material/flatMaterial.js";
 import TextureMaterial from "../Material/textureMaterial.js";
 
@@ -35,6 +34,7 @@ export default class Rectanlge extends Primitive{
     //gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.IBO);
     gl.drawElements(gl.TRIANGLES,this.indexData.length,gl.UNSIGNED_SHORT,0);
+    //gl.drawElements(gl.LINES,this.indexData.length,gl.UNSIGNED_SHORT,0);
     gl.flush();
     gl.bindBuffer(gl.ARRAY_BUFFER,null);
   }

@@ -1,6 +1,5 @@
 import kawa from "../kawasemi.js";
 import Renderer from "../glCore/renderer.js";
-import GLProgram from "../glCore/glProgram.js";
 
 export default class Primitive{
   constructor(){

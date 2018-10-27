@@ -4,10 +4,16 @@ export default class Texture {
   constructor(path){
     const gl = Renderer.gl;
     let img = new Image;
-    img.onload = function(){
-      this.texture = gl.createTexture();
-      gl.bindTexture(gl.TEXTURE_2D,this.texture);
+    this.onReady = false;
+    img.onload = ()=>{
+      cl("bind");
+      this.onReady = true;
+      this.textureObject = gl.createTexture();
+      cl(img.height);
+      cl(img.width);
+      gl.bindTexture(gl.TEXTURE_2D,this.textureObject);
       gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);
+      gl.generateMipmap(gl.TEXTURE_2D);
       gl.bindTexture(gl.TEXTURE_2D,null);
     }
     img.src = path;

@@ -13,6 +13,7 @@ export default class GLProgram{
       gl.attachShader(this.program,vs);
       gl.linkProgram(this.program);
       gl.useProgram(this.program);
+
       res();
     });
   }

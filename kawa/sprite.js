@@ -1,18 +1,24 @@
 import Renderer from "./glCore/renderer.js";
 import TextureMaterial from "./Material/textureMaterial.js";
+import VBO from "./glCore/VBO.js";
 
 export default class Sprite{
-  constructor(texture,x,y){
+  constructor(texture,x,y,w,h){
     this.texture = texture;
     this.x = x;
     this.y = y;
-      let w = 0.1 ; let h = 0.1;
     this.vertexData = [
       x , y ,
       x+w , y ,
       x , y+h ,
       x+w , y+h ,
     ]
+    this.texcoord = [
+        0.0, 1.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0
+    ];
     this.material = TextureMaterial;
     this.VBOInit(this.vertexData);
     this.indexData = [
@@ -21,16 +27,27 @@ export default class Sprite{
     ]
     this.IBOInit(this.indexData);
   }
+  SetUniform(){
+      const gl = Renderer.gl;
+      gl.useProgram(this.material.program);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.texture.textureObject);
+      let texL = gl.getUniformLocation(this.material.program, 'texture');
+      gl.uniform1i(texL, 0);
+  }
   Render(){
-    const gl = Renderer.gl;
-    this.AttributeInit()
-    //gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.IBO);
-    gl.useProgram(this.material.program);
-    gl.drawElements(gl.TRIANGLES,this.indexData.length,gl.UNSIGNED_SHORT,0);
+    if(this.texture.onReady){
+      const gl = Renderer.gl;
+      this.SetAttribute()
+      this.SetUniform();
+      //gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.IBO);
+      gl.useProgram(this.material.program);
+      gl.drawElements(gl.TRIANGLES,this.indexData.length,gl.UNSIGNED_SHORT,0);
 
-    gl.flush();
-    gl.bindBuffer(gl.ARRAY_BUFFER,null);
+      gl.flush();
+      gl.bindBuffer(gl.ARRAY_BUFFER,null);
+    }
   }
   IBOInit(data){
     const gl = Renderer.gl;
@@ -41,18 +58,23 @@ export default class Sprite{
   }
   VBOInit(data){
     const gl = Renderer.gl;
-    this.VBO = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER,null);
+    this.posVBO = new VBO(this.vertexData);
+    this.texVBO = new VBO(this.texcoord);
   }
-  AttributeInit(){
+  SetAttribute(){
     const gl = Renderer.gl;
     const program = this.material.program;
-    gl.bindBuffer(gl.ARRAY_BUFFER,this.VBO);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER,this.posVBO.buffer);
     const attr = gl.getAttribLocation(program,"position");
     gl.enableVertexAttribArray(attr);
     gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,null);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER,this.texVBO.buffer);
+    const attr2 = gl.getAttribLocation(program,"textureCoord");
+    gl.enableVertexAttribArray(attr2);
+    gl.vertexAttribPointer(attr2, 2, gl.FLOAT, false, 0, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER,null);
   }
 }

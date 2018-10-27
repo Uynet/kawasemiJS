@@ -5,19 +5,19 @@ let r1,r2;
 
 export default class Main{
   static Init(){
-    return new Promise(res=>{
+    return new Promise(resolve=>{
 
       stage = new KAWA.Stage();
-      r1 = new KAWA.Rectangle(-0.5,-0.5,0.5,0.5);
+      r1 = new KAWA.Rectangle(-0.2,-0.5,0.5,0.5);
       r2 = new KAWA.Rectangle(0.5,-0.5,0.3,0.3);
       stage.Add(r1);
       stage.Add(r2);
 
       let texture = new KAWA.Texture("resource/img.png");
-      let sprite = new KAWA.Sprite(texture,0,0);
+      let sprite = new KAWA.Sprite(texture,0,0,0.4,0.4);
       stage.Add(sprite);
 
-      res();
+      resolve();
     })
   }
   static Run(){
