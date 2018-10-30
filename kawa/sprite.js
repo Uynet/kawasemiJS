@@ -41,8 +41,13 @@ export default class Sprite{
       this.SetAttribute()
       this.SetUniform();
       //gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(this.vertexData),gl.STATIC_DRAW);
+      
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.IBO);
       gl.useProgram(this.material.program);
+      //alpha blend
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+
       gl.drawElements(gl.TRIANGLES,this.indexData.length,gl.UNSIGNED_SHORT,0);
 
       gl.flush();
