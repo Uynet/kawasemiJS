@@ -6,6 +6,7 @@ import FlatMaterial from "./Material/flatMaterial.js";
 import TextureMaterial from "./Material/textureMaterial.js";
 import Texture from "./texture.js";
 import Sprite from "./sprite.js";
+import FrameBufferObject from "./glCore/frameBufferObject.js";
 
 export default class KAWA{
   static Init(width , height){
@@ -17,6 +18,7 @@ export default class KAWA{
     this.Rectangle = Rectangle;
     this.Texture = Texture;
     this.Sprite = Sprite;
+    this.FrameBufferObject = FrameBufferObject;
 
     this.Material = {
       texture : TextureMaterial,
@@ -33,5 +35,7 @@ export default class KAWA{
   }
   static Render(stage){
     this.Renderer.Render(stage);
+  }
+  getFrameBufferTexture(){
   }
 }

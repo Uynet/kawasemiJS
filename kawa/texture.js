@@ -6,11 +6,8 @@ export default class Texture {
     let img = new Image;
     this.onReady = false;
     img.onload = ()=>{
-      cl("bind");
       this.onReady = true;
       this.textureObject = gl.createTexture();
-      cl(img.height);
-      cl(img.width);
       gl.bindTexture(gl.TEXTURE_2D,this.textureObject);
       gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);
       gl.generateMipmap(gl.TEXTURE_2D);

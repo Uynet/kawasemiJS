@@ -15,6 +15,9 @@ export default class Renderer{
       console.error("webGL対応してないよ")
     }
   }
+  static GetGL(){
+    return this.gl;
+  }
   static Render(Stage){
     const gl = this.gl;
     gl.clearColor(0,0,0,1);
