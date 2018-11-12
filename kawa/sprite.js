@@ -28,12 +28,13 @@ export default class Sprite{
     this.IBOInit(this.indexData);
   }
   SetUniform(){
+      const texSlot = 0;
       const gl = Renderer.gl;
       gl.useProgram(this.material.program);
-      gl.activeTexture(gl.TEXTURE0);
+      gl.activeTexture(gl.TEXTURE0+texSlot);
       gl.bindTexture(gl.TEXTURE_2D, this.texture.textureObject);
       let texL = gl.getUniformLocation(this.material.program, 'texture');
-      gl.uniform1i(texL, 0);
+      gl.uniform1i(texL,texSlot);
   }
   Render(){
     if(this.texture.onReady){

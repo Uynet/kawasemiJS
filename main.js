@@ -25,15 +25,14 @@ timer = 0;
     })
   }
   static Run(){
-    requestAnimationFrame(Main.Run);
-
-    if(timer == 40) stage.Remove(sprite);
+    //requestAnimationFrame(Main.Run);
     KAWA.Render(stage);
     timer++;
   }
 }
 
 KAWA.Init(400,400).then(()=>{
-  Main.Init().then(Main.Run);
+  Main.Init()
+  setTimeout(Main.Run,400);
 });
 
