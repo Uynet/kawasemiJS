@@ -4,6 +4,7 @@ let kawa,stage;
 let timer;
 let r1,r2;
 let sprite
+let fbo;
 
 export default class Main{
   static Init(){
@@ -16,17 +17,23 @@ timer = 0;
       stage.Add(r2);
 
       let texture = new KAWA.Texture("resource/img.png");
-      let fbo = new KAWA.FrameBufferObject();
-      fbo.createBuffer(16,16);
+      fbo = new KAWA.FrameBufferObject(256,256);
+      fbo.createBuffer();
       sprite = new KAWA.Sprite(texture,0,0,0.4,0.4);
-      stage.Add(sprite);
+      //stage.Add(sprite);
 
       resolve();
     })
   }
+  //test for only 1 drawing
   static Run(){
     //requestAnimationFrame(Main.Run);
+    fbo.Bind();
+    fbo.gl.viewport(0,0,fbo.width, fbo.height);
     KAWA.Render(stage);
+    fbo.UnBind();
+    //sprite.setTextureSlot(10);
+    sprite.Render();
     timer++;
   }
 }
